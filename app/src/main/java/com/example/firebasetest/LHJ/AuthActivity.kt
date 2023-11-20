@@ -3,6 +3,7 @@ package com.example.firebasetest.LHJ
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.firebasetest.LHJ.databinding.ActivityAuthBinding
@@ -87,6 +88,68 @@ class AuthActivity : AppCompatActivity() {
             MyApplication.email=null
             changeVisi("logout")
         }
+        
+        //이메일/비밀번호 기능 이용하기, 파이어베이스 인증 기능임.
+        // 실제로 인증 링크를 받을 수 있는 메일로 테스트
+        // 여기서 사용하는 패스워드는, 현재 로그인하기 위한, 패스워드
+        // 파이어 베이스 인증, 해당 메일/ 등록한 패스워드로 등록이 되고,
+        //인증해서, 로그인이 가능함
+        binding.signInBtn2.setOnClickListener { 
+            val email = binding.authEmailEdit.text.toString()
+            val password = binding.authPasswordEdit.text.toString()
+            
+            //createUserWithEmailAndPassword 이용해서, 입력한 이메일, 패스워드로 가입하기.
+            MyApplication.auth.createUserWithEmailAndPassword(email,password)
+                //회원가입이 잘 되었을 경우, 호출되는 콜백함수임.
+                .addOnCompleteListener(this){
+                    task ->
+                    binding.authEmailEdit.text.clear()
+                    binding.authPasswordEdit.text.clear()
+                    if(task.isSuccessful){
+                        //회원가입 성공 한 경우
+                        MyApplication.auth.currentUser?.sendEmailVerification()
+                            //회원가입한 이메일에 인증링크를 잘 보냈다면, 수행할 콜백함수.
+                            ?.addOnCompleteListener(this){
+                                sendTask ->
+                                if(sendTask.isSuccessful){
+                                    Toast.makeText(this,"회원가입 성공, 전송된 메일 확인해주세요.",Toast.LENGTH_SHORT).show()
+                                    changeVisi("logout")
+                                }else{
+                                    Toast.makeText(this,"메일 발송 실패.",Toast.LENGTH_SHORT).show()
+                                    changeVisi("logout")
+                                }
+                            }
+                    }else{
+                        //회원가입 실패 한 경우
+                        Toast.makeText(this,"회원가입 실패",Toast.LENGTH_SHORT).show()
+                        changeVisi("logout")
+                    }
+                }
+        }
+
+        //가입한 이메일/패스워드로, 로그인
+        binding.logInBtn.setOnClickListener {
+            val email = binding.authEmailEdit.text.toString()
+            val password = binding.authPasswordEdit.text.toString()
+
+            MyApplication.auth.signInWithEmailAndPassword(email,password)
+            //로그인이 잘 되었을 경우, 실행될 콜백함수 등록
+                .addOnCompleteListener(this){
+                    task->
+                    binding.authEmailEdit.text.clear()
+                    binding.authPasswordEdit.text.clear()
+                    if(task.isSuccessful){
+                        if(MyApplication.checkAuth()){
+                            MyApplication.email=email
+                            changeVisi("login")
+                        }else{
+                            Toast.makeText(this,"전송된 메일로 인증이 안되었습니다.",Toast.LENGTH_SHORT).show()
+                        }
+                    }else{
+                        Toast.makeText(this,"로그인 실패",Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
 
         //onCreate
     }
@@ -101,7 +164,7 @@ class AuthActivity : AppCompatActivity() {
             binding.logoutBtn.visibility= View.VISIBLE
             // 그외 버튼, 에딧텍스트뷰, 회원가입, 구글인증 다 안보이게 설정.
             binding.signInBtn.visibility=View.GONE
-            binding.signINBtn2.visibility=View.GONE
+            binding.signInBtn2.visibility=View.GONE
             binding.googleAuthBtn.visibility=View.GONE
             binding.authEmailEdit.visibility=View.GONE
             binding.authPasswordEdit.visibility=View.GONE
@@ -111,7 +174,7 @@ class AuthActivity : AppCompatActivity() {
             binding.logoutBtn.visibility= View.GONE
             // 그외 버튼, 에딧텍스트뷰, 회원가입, 구글인증 다 안보이게 설정.
             binding.signInBtn.visibility=View.VISIBLE
-            binding.signINBtn2.visibility=View.VISIBLE
+            binding.signInBtn2.visibility=View.VISIBLE
             binding.googleAuthBtn.visibility=View.VISIBLE
             binding.authEmailEdit.visibility=View.VISIBLE
             binding.authPasswordEdit.visibility=View.VISIBLE
@@ -120,7 +183,7 @@ class AuthActivity : AppCompatActivity() {
             binding.logoutBtn.visibility= View.GONE
             // 그외 버튼, 에딧텍스트뷰, 회원가입, 구글인증 다 안보이게 설정.
             binding.signInBtn.visibility=View.GONE
-            binding.signINBtn2.visibility=View.GONE
+            binding.signInBtn2.visibility=View.GONE
             binding.googleAuthBtn.visibility=View.GONE
             binding.authEmailEdit.visibility=View.VISIBLE
             binding.authPasswordEdit.visibility=View.VISIBLE
