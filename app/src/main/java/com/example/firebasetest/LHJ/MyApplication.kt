@@ -25,7 +25,7 @@ class MyApplication : MultiDexApplication() {
 
         //이미지 저장소, 인스턴스 도구
         lateinit var storage: FirebaseStorage
-        //데이터 저장소, 인스턴스 도구
+        //파이어 스토어, 인스턴스 도구
         lateinit var db : FirebaseFirestore
 
         //MyApplication.checkAuth() : 이렇게 클래스명. 함수 및 특정 변수에 접근이 가능함.
