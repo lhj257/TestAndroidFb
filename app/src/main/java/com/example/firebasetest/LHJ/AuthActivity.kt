@@ -138,7 +138,10 @@ class AuthActivity : AppCompatActivity() {
                     task->
                     binding.authEmailEdit.text.clear()
                     binding.authPasswordEdit.text.clear()
+                    //로그인이 된경우
                     if(task.isSuccessful){
+                        //로그인이 되었을 때, 해당 인증 확인
+                        //현재 유저 확인, 했을 경우,
                         if(MyApplication.checkAuth()){
                             MyApplication.email=email
                             changeVisi("login")

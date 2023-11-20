@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:backgroundTint="#003FFF"
-            android:text="가입"
+            android:text="가입(파이어 인증 이메일/패스워드 등록)"
             android:textStyle="bold"
             android:visibility="gone"/>
         <Button
