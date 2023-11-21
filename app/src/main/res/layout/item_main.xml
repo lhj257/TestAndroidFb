@@ -19,7 +19,7 @@
             android:id="@+id/emailResultView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="#45388A"
             android:text="데이터표시1"
             android:textSize="15sp"/>
 
@@ -27,7 +27,7 @@
             android:id="@+id/dateResultView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="#FF0000"
             android:layout_marginLeft="10dp"
             android:text="데이터표시2"
             android:textSize="15sp"/>
@@ -35,11 +35,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
         <Button
             android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="삭제"
             android:layout_marginLeft="10dp"/>
 
@@ -47,6 +49,7 @@
             android:id="@+id/updateBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="수정"
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
@@ -57,6 +60,9 @@
         android:layout_height="200dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/cat"
         android:scaleType="fitXY" />
 
     <TextView
