@@ -14,8 +14,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.firebasetest.LHJ.MyApplication
 import com.example.firebasetest.LHJ.R
+import com.example.firebasetest.LHJ.Utils.MyUtil
 import com.example.firebasetest.LHJ.databinding.ActivityAddImageShareAppBinding
 import java.io.File
+import java.util.Date
 
 class AddImageShareAppActivity : AppCompatActivity() {
     lateinit var binding : ActivityAddImageShareAppBinding
@@ -93,6 +95,8 @@ class AddImageShareAppActivity : AppCompatActivity() {
             requestLauncher.launch(intent)
         }else if(item.itemId===R.id.menu_add_save){
             //불러온 이미지와, 콘텐츠 내용, 스토어, 스토리지 사용하기.
+            //함수 적용하기
+            addStore()
         }
 
         // 저장 구성, 인증은 메인으로 옮기기
@@ -100,6 +104,32 @@ class AddImageShareAppActivity : AppCompatActivity() {
     }
 
     //스토어 글쓰기 함수
+    private fun addStore() {
+        val data = mapOf(
+            "email" to MyApplication.email,
+            "content" to binding.contentEditView.text.toString(),
+            "date" to MyUtil.dateToString(Date())
+        )
+        // 스토어에 넣기. NoSQL 기반, JSON과 비슷함.
+        MyApplication.db.collection("AndroidImageShareApp")
+            // 데이터 추가
+            .add(data)
+            // 데이터 추가 성공후 실행할 콜백 함수
+            .addOnCompleteListener{
+                // 스토어 글쓰기 수행 후, 성공해서 이 블록이 실행이 됨.
+                // it 데이터가 담겨 있음.
+                Log.d("lhj","글쓰기 성공")
+                Toast.makeText(this,"글쓰기 성공",Toast.LENGTH_SHORT).show()
+                binding.contentEditView.text.clear()
+                // 이미지 업로드를 같이 진행하기.
+                uploadImage(it.result.id)
+            }
+            // 데이터 추가 실패후 실행할 콜백 함수
+            .addOnFailureListener {
+                Log.d("lhj","글쓰기 실패")
+                Toast.makeText(this,"글쓰기 실패",Toast.LENGTH_SHORT).show()
+            }
+    }
 
     //스토리지에 업로드 함수
     // 변경되는 부분, 이미지 파일명 = 스토어에 자동 저장이되는 id로,
