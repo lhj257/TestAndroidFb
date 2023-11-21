@@ -20,8 +20,11 @@
         android:theme="@style/Theme.FireBaseTest"
         tools:targetApi="31">
         <activity
+            android:name=".imageShareApp.AddImageShareAppActivity"
+            android:exported="true" />
+        <activity
             android:name=".imageShareApp.MainImageShareAppActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".AddFireStoreActivity"
             android:exported="true" />
