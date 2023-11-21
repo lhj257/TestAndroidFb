@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.firebasetest.LHJ.MyApplication
 import com.example.firebasetest.LHJ.databinding.ItemMainBinding
 import com.example.firebasetest.LHJ.imageShareApp.model.ItemData
 
@@ -11,7 +13,7 @@ import com.example.firebasetest.LHJ.imageShareApp.model.ItemData
 // 아이템 요소의 뷰를 설정하기. -> 목록요소 뷰 -> 메뉴 아이템 뷰 구성. 백
 class MyViewHolder(val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root)
 
-class MyAdapter (val content:Context, val itemList: MutableList<ItemData>) :
+class MyAdapter (val context:Context, val itemList: MutableList<ItemData>) :
     RecyclerView.Adapter<MyViewHolder>() {
     // 목록 요소에, 데이터를 연결 시켜주는 역할.
     // 뷰홀더 있음.
@@ -34,5 +36,24 @@ class MyAdapter (val content:Context, val itemList: MutableList<ItemData>) :
             dateResultView.text = data.date
             contentResultView.text = data.content
         }
+
+        //스토리지에서 이미지 불러와서, Glid로 출력하기
+        val imgRef=MyApplication.storage.reference
+            //사진이 한장이라서, 게시글의 id(자동생성된값) 이용하고 있음.
+            .child("imagesShareApp/${data.docId}.jpg")
+        //다운로드, 스토리지에서, 이미지의 저장소의 URL 가져오기
+        imgRef.downloadUrl
+            .addOnCompleteListener {
+                //성공시 수행할 콜백 함수, task안에 이미지의 url담겨있음
+                task->
+                if(task.isSuccessful){
+                    // with 동작을 해당 activity, 등 context로 대체.
+                    Glide.with(context)
+                        //URL 주소로 이미지 불러오기
+                        .load(task.result)
+                        //결과 뷰에 이미지 넣기.
+                        .into(holder.binding.imageResultView)
+                }
+            }
     }
 }
