@@ -68,6 +68,8 @@ dependencies {
     // 파이어베이스, 스토리지, 스토어 같이 설치.
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+    // FCM 기능 추가.
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.0'
 
 
 }
